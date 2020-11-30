@@ -18,7 +18,16 @@ main(int argc, char *argv[])
       exit(1);
     }
     while((c = fgetc(f)) != EOF){
-      if (c == '\n') line++;
+
+      if (c == '\t')
+      {
+        printf("\\t");
+      }
+      if (c == '\n'){
+        line++;
+        printf("$\n");
+      }
+
       if(putchar(c)<0) exit(1);
     }
     printf("%d\n", line);
