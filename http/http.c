@@ -6,6 +6,30 @@
 
 typedef void (*sighandler_t)(int);
 
+
+
+int
+main(int argc, char *argv[])
+{
+  if(argc !=2){
+    fprintf(stderr, "Usage");
+    exit(1);
+  }
+  install_signal_handers();
+  service(stdin, stdout, argv[1]);
+  exit(0);
+}
+
+static void
+service(FILE *in, FILE *out,char *docroot)
+{
+  struct HTTPRequest *req;
+
+  req = read_request(in);
+  respond_to(req, out, docroot);
+  free_request(req);
+}
+
 static void
 log_exit(char *fmt, ...)
 {
