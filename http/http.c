@@ -6,7 +6,20 @@
 
 typedef void (*sighandler_t)(int);
 
+struct HTTPHeaderField{
+  char *name;
+  char *value;
+  struct HTTPHeaderField *next;
+};
 
+struct HTTPRequest{
+  int protocal_minot_version;
+  char *method;
+  char *path;
+  struct HTTPHeaderField *header;
+  char *body;
+  long length;
+};
 
 int
 main(int argc, char *argv[])
@@ -28,6 +41,30 @@ service(FILE *in, FILE *out,char *docroot)
   req = read_request(in);
   respond_to(req, out, docroot);
   free_request(req);
+}
+
+static struct HTTPRequest*
+read_request(FILE *in)
+{
+  
+}
+
+static void
+free_request(struct HTTPRequest *req)
+{
+  struct HTTPHeaderField *h, *head;
+  head = req->header;
+  while (head){
+    h = head;
+    head = head->next;
+    free(head->name);
+    free(head->value);
+    free(h);
+  }
+  free(req->method);
+  free(req->path);
+  free(req->body);
+  free(req);
 }
 
 static void
